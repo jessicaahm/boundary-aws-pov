@@ -1,0 +1,16 @@
+# --- Provider --- #
+boundary_addr           = "<UPDATE_ME_BOUNDARY_ADDR>" #terraform output boundary_url
+global_auth_method_id   = "<UPDATE_ME_PWD_AUTH_METHOD_ID>" #terraform output auth_method_id
+global_admin_login_name = "<UPDATE_ME_DEFAULT_ADMIN>"
+global_admin_password   = "<UPDATE_ME_DEFAULT_PWD>"
+
+# --- Target --- #
+vpc_id                  = "<UPDATE_ME_TARGET_VPC_ID>"
+target_subnet_id        = "UPDATE_ME_TARGET_SUBNET_ID"
+
+# --- OIDC --- #
+oidc_issuer             = "<UPDATE_ME_OIDC_ISSUER>" #get from azure
+oidc_client_id          = "<UPDATE_ME_APP_ID>" #get from azure
+oidc_client_secret      = "<UPDATE_ME_APP_CLIENT_SECRET>" #get from azure
+oidc_username           = "<UPDATE_ME_USERNAME>" #get from azure
+oidc_user_objectid      = "<UPDATE_ME_USER_OBJECT_ID>" #get from azure
