@@ -2,3 +2,8 @@ output "token" {
     value       = kubernetes_token_request_v1.vault_sa_token.token
     sensitive   = true
 }
+
+output "orphan_token" {
+    value       = vault_token.orphan_token.client_token
+    sensitive   = true
+}

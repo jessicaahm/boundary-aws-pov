@@ -26,7 +26,16 @@ kubectl get pod --certificate-authority=ca.crt --server=$KUBE_API_URL --token=$R
 kubectl get node --certificate-authority=ca.crt --server=$KUBE_API_URL --token=$REMOTE_USER_TOKEN -n game-2048
 
 # test 
-kubectl get pod --certificate-authority=ca.crt --server=https://127.0.0.1:$PORT --token=$REMOTE_USER_TOKEN -n game-2048
+kubectl get pod --insecure-skip-tls-verify --server=https://127.0.0.1:$PORT --token=$REMOTE_USER_TOKEN -n game-2048
+kubectl get pod --certificate-authority=ca.crt --server=$KUBE_API_URL --token=$REMOTE_USER_TOKEN -n game-2048
+
+# expected output
+# NAME                              READY   STATUS    RESTARTS   AGE
+# deployment-2048-bdbddc878-6b54f   1/1     Running   0          4d17h
+# deployment-2048-bdbddc878-gt8n7   1/1     Running   0          4d17h
+# deployment-2048-bdbddc878-h2whn   1/1     Running   0          4d17h
+# deployment-2048-bdbddc878-t2fhc   1/1     Running   0          4d17h
+# deployment-2048-bdbddc878-vkb8k   1/1     Running   0          4d17h
 
 # Create a target in Boundary to access the eks cluster
 KUBE_TARGET_ID=$(boundary targets create tcp \
@@ -38,8 +47,18 @@ KUBE_TARGET_ID=$(boundary targets create tcp \
     -session-connection-limit="-1" \
     -format json | jq -r '.item | .id') && echo $KUBE_TARGET_ID
 
+boundary targets authorize-session \
+     -id $KUBE_TARGET_ID \
+     -format json | jq -r '.item | .credentials[] | .secret | .decoded | .service_account_token') \
+     && echo $BROKERED_KUBE_TOKEN
+
 ```
+
+## Commo Error:
+https://support.hashicorp.com/hc/en-us/articles/42413506765715-Error-in-HCP-Boundary-Target-Access-vaultClientFactory-vault-newClient-invalid-configuration-parameter-violation-error-100
 
 ## Reference
 
 https://www.hashicorp.com/en/blog/how-to-connect-to-kubernetes-clusters-using-boundary
+
+https://developer.hashicorp.com/boundary/tutorials/kubernetes-connect/kubernetes-getting-started-connect

@@ -80,18 +80,18 @@ resource "vault_kubernetes_secret_backend_role" "k8s-role" {
   token_default_ttl             = 21600
   generated_role_rules          = <<EOF
   {
-    "rules":[
-      {
-      "apiGroups":[""],
-      "resources":["pods"],
-      "verbs":["list"]
-      }
-]
-  }
+  "rules": [
+    {
+          "apiGroups": [""],
+          "resources": ["pods"],
+          "verbs": ["get", "list", "create", "update", "delete"]
+    }
+      ]
+    }
   EOF
 }
 
-# create policy for boundar
+# create policy for boundary
 resource "vault_policy" "boundary-controller" {
   namespace = vault_namespace.vault_namespace.path
   name = "support-team"
@@ -118,11 +118,11 @@ resource "vault_policy" "boundary-controller" {
  }
 
  path "sys/capabilities-self" {
-   capabilities = ["update"]
+   capabilities = ["read","update"]
  }
 
  path "kubernetes/creds/vault-service-account-name-role" {
-   capabilities = ["update"]
+   capabilities = ["read","update"]
  }
 EOT
 }
@@ -165,5 +165,4 @@ resource "boundary_credential_library_vault" "k8s_credlib" {
   "kubernetes_namespace": "game-2048"	
 }
 EOT
-
 }
