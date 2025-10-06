@@ -162,7 +162,7 @@ resource "boundary_credential_library_vault" "k8s_credlib" {
   http_method         = "POST"
   http_request_body   = <<EOT
 {
-  "kubernetes_namespace": "default"	
+  "kubernetes_namespace": "game-2048"	
 }
 EOT
 
